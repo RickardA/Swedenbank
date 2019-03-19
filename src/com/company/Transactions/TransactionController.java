@@ -1,4 +1,4 @@
-package com.company.Transaction;
+package com.company.Transactions;
 
 public class TransactionController {
 }

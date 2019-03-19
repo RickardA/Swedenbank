@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.company.Home"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane fx:id="homePage" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.company.Home.HomeController">
+   <children>
+      <TableView fx:id="accountsTable" layoutX="104.0" layoutY="14.0" prefHeight="281.0" prefWidth="391.0" fixedCellSize="50">
+        <columns>
+           <TableColumn fx:id="accountNumberColumn" prefWidth="120" text="Kontonummer" />
+          <TableColumn fx:id="accountNameColumn" prefWidth="150" text="Kontonamn" />
+          <TableColumn fx:id="accountBalanceColumn" prefWidth="120" text="Tillgängligt Belopp" />
+        </columns>
+      </TableView>
+   </children>
 </AnchorPane>
