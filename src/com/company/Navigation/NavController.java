@@ -14,9 +14,7 @@ public class NavController {
 
     @FXML
     private BorderPane borderPane;
-
-    @FXML
-    private void initialize(){
+    public void displayHomePage(){
         displayUI("../Home/home.fxml");
     }
 
@@ -27,12 +25,14 @@ public class NavController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        System.out.println("printing from display ui");
         borderPane.setCenter(root);
     }
 
     public void switchToChoosenAccount(Account choosenAccount){
-        setChoosenAccount(choosenAccount);
         displayUI("../Accounts/account.fxml");
+        setChoosenAccount(choosenAccount);
     }
 
     private void setChoosenAccount(Account choosenAccount){

@@ -5,10 +5,14 @@ import com.company.Database.DB;
 import com.company.Helpers.Loader;
 import com.company.Navigation.NavController;
 import com.company.Program;
+import javafx.beans.binding.Bindings;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.skin.TableHeaderRow;
 
 public class HomeController {
 

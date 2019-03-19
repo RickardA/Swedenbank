@@ -1,7 +1,11 @@
 package com.company.Login;
 
+import com.company.Accounts.AccountController;
 import com.company.Database.DB;
+import com.company.Helpers.Loader;
+import com.company.Home.HomeController;
 import com.company.Main;
+import com.company.Navigation.NavController;
 import com.company.Program;
 import com.company.User;
 import javafx.fxml.FXML;
@@ -22,10 +26,6 @@ public class LoginController {
     @FXML
     private TextField passwordField;
 
-    public LoginController(){
-
-    }
-
     @FXML
     public void loginRequest(){
         User tempUser = DB.getMatchingUser(socialNumberField.getText(),passwordField.getText());
@@ -45,8 +45,10 @@ public class LoginController {
 
     private void showHomePage(){
         try {
-            FXMLLoader homePageLoader = new FXMLLoader(getClass().getResource("../Navigation/nav.fxml"));
-            Parent homePageRoot = homePageLoader.load();
+            FXMLLoader navPageLoader = new FXMLLoader(getClass().getResource("../Navigation/nav.fxml"));
+            Parent homePageRoot = navPageLoader.load();
+            NavController controller = navPageLoader.getController();
+            controller.displayHomePage();
             Scene scene = new Scene(homePageRoot,800,600);
             Main.stage.setScene(scene);
             Main.stage.show();
