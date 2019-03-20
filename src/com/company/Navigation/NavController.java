@@ -2,43 +2,38 @@ package com.company.Navigation;
 
 import com.company.Account;
 import com.company.Accounts.AccountController;
-import com.company.Helpers.Loader;
+import com.company.Home.HomeController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
-
-import java.io.IOException;
 
 public class NavController {
 
     @FXML
     private BorderPane borderPane;
     public void displayHomePage(){
-        displayUI("../Home/home.fxml");
+        HomeController homeController = new HomeController();
+        homeController.setParent(this);
+        displayUI("../Home/home.fxml",homeController);
     }
 
-    private void displayUI(String src){
+    private void displayUI(String src,Object controller){
         Parent root = null;
         try {
-            root = FXMLLoader.load(getClass().getResource(src));
-        } catch (IOException e) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(src));
+            loader.setController(controller);
+            root = loader.load();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        System.out.println("printing from display ui");
         borderPane.setCenter(root);
     }
 
     public void switchToChoosenAccount(Account choosenAccount){
-        displayUI("../Accounts/account.fxml");
-        setChoosenAccount(choosenAccount);
-    }
-
-    private void setChoosenAccount(Account choosenAccount){
-        AccountController accountController = Loader
-                .getFXMLController("../Accounts/account.fxml")
-                .getController();
+        AccountController accountController = new AccountController();
         accountController.setAccountToShow(choosenAccount);
+         displayUI("../Accounts/account.fxml",accountController);
     }
 }

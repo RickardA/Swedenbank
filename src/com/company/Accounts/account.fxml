@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.company.Accounts.AccountController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Text layoutX="269.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kontonamn" />
-      <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kontonummer" />
-      <Text layoutX="452.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tillgängligt Belopp" />
+      <Text fx:id="accountName" layoutX="269.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kontonamn" />
+      <Text fx:id="accountNumber" layoutX="104.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kontonummer" />
+      <Text fx:id="accountBalance" layoutX="395.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tillgängligt Belopp" />
+      <TableView fx:id="transactionTable" fixedCellSize="30" layoutX="104.0" layoutY="59.0" prefHeight="281.0" prefWidth="391.0">
+         <columns>
+            <TableColumn fx:id="transactionNameColumn" prefWidth="120" text="Tansaktionsnamn" />
+            <TableColumn fx:id="transactionSenderColumn" prefWidth="150" text="Avsändare" />
+            <TableColumn fx:id="transactionRecieverColumn" prefWidth="120" text="Mottagare" />
+            <TableColumn fx:id="transactionAmountColumn" prefWidth="120" text="Belopp" />
+         </columns>
+      </TableView>
    </children>
 </AnchorPane>

@@ -1,15 +1,14 @@
 package com.company.Database;
 
 import com.company.Account;
+import com.company.Transaction;
 import com.company.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public abstract class DB {
@@ -46,5 +45,22 @@ public abstract class DB {
             e.printStackTrace();
         }
         return accounts1;
+    }
+
+    public static ObservableList<Transaction> getAccountTransactions(User user,String accountNumber){
+        System.out.println("getting account transactions " + accountNumber);
+        List<Transaction> transactions = new ArrayList<>();
+        ObservableList<Transaction> transactions1 = null;
+        PreparedStatement ps = preparedStatement("SELECT * FROM transactioninformation WHERE " +
+                "sending_account = ? OR recieving_account = ?");
+        try {
+            ps.setString(1,accountNumber);
+            ps.setString(2,accountNumber);
+            transactions = (List<Transaction>) new ObjectMapper<>(Transaction.class).map(ps.executeQuery());
+            transactions1 = FXCollections.observableArrayList(transactions);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return transactions1;
     }
 }

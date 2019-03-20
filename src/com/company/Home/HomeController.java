@@ -3,18 +3,20 @@ package com.company.Home;
 import com.company.Account;
 import com.company.Database.DB;
 import com.company.Helpers.Loader;
+import com.company.Interfaces.ParentController;
 import com.company.Navigation.NavController;
 import com.company.Program;
 import javafx.beans.binding.Bindings;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.skin.TableHeaderRow;
 
-public class HomeController {
+public class HomeController implements ParentController {
 
     @FXML
     private TableColumn<Account, String> accountNameColumn;
@@ -24,6 +26,7 @@ public class HomeController {
     private TableColumn<Account,String> accountNumberColumn;
     @FXML
     private TableView accountsTable;
+    private NavController parentController;
 
     @FXML
     private void initialize() {
@@ -49,9 +52,11 @@ public class HomeController {
 
     private void showSelectedAccount() {
         System.out.println(accountsTable.getSelectionModel().getSelectedItem());
-        NavController navController = Loader
-                .getFXMLController("../Navigation/nav.fxml")
-                .getController();
-        navController.switchToChoosenAccount((Account) accountsTable.getSelectionModel().getSelectedItem());
+        parentController.switchToChoosenAccount((Account) accountsTable.getSelectionModel().getSelectedItem());
+    }
+
+    @Override
+    public void setParent(Object parent) {
+        parentController = (NavController) parent;
     }
 }

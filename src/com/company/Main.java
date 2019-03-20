@@ -14,6 +14,7 @@ public class Main extends Application {
         stage = primaryStage;
 
         Parent root = FXMLLoader.load(getClass().getResource("Login/login.fxml"));
+
         primaryStage.setTitle("Swedenbank");
         primaryStage.setScene(new Scene(root, 400, 300));
         primaryStage.show();

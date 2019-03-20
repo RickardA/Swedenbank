@@ -20,7 +20,7 @@
                <VBox.margin>
                   <Insets top="14.0" />
                </VBox.margin></Button>
-            <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="153.0" text="Betala och överföra" textFill="#ff8800" />
+            <Button fx:id="someButton" mnemonicParsing="false" prefHeight="59.0" prefWidth="153.0" text="Betala och överföra" textFill="#ff8800" />
             <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="153.0" text="Autogiro" textFill="#ff8800" />
             <Button mnemonicParsing="false" prefHeight="59.0" prefWidth="153.0" text="Logga Ut" textFill="#ff8800" />
          </children>
