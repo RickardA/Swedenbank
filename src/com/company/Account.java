@@ -4,6 +4,7 @@ import com.company.Annotations.Column;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+
 public class Account {
 
     @Column
@@ -12,6 +13,8 @@ public class Account {
     private String account_name;
     @Column
     private double balance;
+    @Column
+    private String type;
 
     private ObservableList<Transaction> transactions;
 

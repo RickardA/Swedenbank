@@ -2,30 +2,38 @@ package com.company;
 
 import com.company.Annotations.Column;
 
+import java.sql.Timestamp;
+
 public class Transaction {
 
     @Column
     private String transaction_name;
     @Column
-    private String sending_account;
+    private String account;
     @Column
-    private String recieving_account;
+    private String type;
     @Column
     private double transaction_ammount;
+    @Column
+    private Timestamp date;
 
     public String getTransaction_name() {
         return transaction_name;
     }
 
-    public String getSending_account() {
-        return sending_account;
+    public String getAccount() {
+        return account;
     }
 
-    public String getRecieving_account() {
-        return recieving_account;
+    public String getType() {
+        return type;
     }
 
     public double getTransaction_ammount() {
         return transaction_ammount;
+    }
+
+    public Timestamp getDate() {
+        return date;
     }
 }

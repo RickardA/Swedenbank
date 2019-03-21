@@ -7,6 +7,7 @@ public class Database implements Runnable {
     private static Database databasseInstance = new Database();
     private Connection databaseConnection = null;
     private HashMap<String, PreparedStatement> preparedStatements = new HashMap<>();
+    private HashMap<String,CallableStatement> callableStatements = new HashMap<>();
 
     public static Database getInstance() {
         return databasseInstance;
@@ -28,6 +29,18 @@ public class Database implements Runnable {
         return ps;
     }
 
+
+    public CallableStatement callableStatement(String SQLQuery) {
+        CallableStatement cs = callableStatements.get(SQLQuery);
+        if (cs == null) {
+            try {
+                cs = databaseConnection.prepareCall(SQLQuery);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return cs;
+    }
 
 
     private void connectToDb() {
