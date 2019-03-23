@@ -3,6 +3,7 @@ package com.company.Navigation;
 import com.company.Account;
 import com.company.Accounts.AccountController;
 import com.company.Card.CardController;
+import com.company.Company.CompanyController;
 import com.company.Database.DB;
 import com.company.Home.HomeController;
 import com.company.Program;
@@ -11,6 +12,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
+
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Calendar;
 
 public class NavController {
 
@@ -54,8 +60,10 @@ public class NavController {
         displayUI("../Card/card.fxml",cardController);
     }
 
-    public void test(){
-        //DB.createSalaryPayment("890214-9867",212345.0, Program.getAccounts().get(0).getAccount_number(),"2019-03-21 16:12:00");
-        DB.createSchedueldTransaction("asd",321.0,"asd","asad","sad","sad","Lön");
+    public void displayCompanyPage(){
+        CompanyController companyController = new CompanyController();
+        companyController.setParent(this);
+        displayUI("../Company/company.fxml",companyController);
     }
+
 }

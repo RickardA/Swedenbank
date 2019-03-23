@@ -6,12 +6,9 @@ import com.company.Transaction;
 import com.company.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
-import java.rmi.activation.ActivationGroup_Stub;
-import java.sql.CallableStatement;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class DB {
 
@@ -100,65 +97,60 @@ public abstract class DB {
         }
     }
 
-    public static void createSchedueldEvent(String socialNumber, Double amount, String sender, String date) {
-        String personnummer = Program.getLoggedInUser().getSocial_number();
-        PreparedStatement ps = preparedStatement(
-                "CREATE EVENT userEvent"+ personnummer + " \n" +
-                        "ON SCHEDULE EVERY 1 DAY \n" +
-                        "DO BEGIN \n" +
-                        "CALL check_transactions(?);\n" +
-                        "END");
+
+    public static void addSalaryTransaction(String socialNumber, Double amount, String senderAccount, Date date) {
+        CallableStatement cs = callableStatement("{CALL add_employee_salary(?,?,?,?)}");
         try {
-            ps.setString(1, "user" +personnummer);
-            ps.executeUpdate();
-        } catch (Exception e) {
+            cs.setString(1, socialNumber);
+            cs.setDouble(2, amount);
+            cs.setString(3, senderAccount);
+            cs.setDate(4, date);
+            cs.executeUpdate();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static void createSchedueldTransaction(String socialNumber, Double amount, String senderAccount, String recieverAccount, String date, String text, String type) {
-        String personnummer = Program.getLoggedInUser().getSocial_number();
-        PreparedStatement ps = preparedStatement("CREATE TABLE user" + personnummer + " ( \n" +
-                "        id INT(11) NOT NULL AUTO_INCREMENT, \n" +
-                "        social_number VARCHAR(13),\n" +
-                "        amount DOUBLE,  \n" +
-                "        sender_account VARCHAR(50),\n" +
-                "        recieving_account VARCHAR(50),\n" +
-                "        transaction_date VARCHAR(50),\n" +
-                "        `text` VARCHAR(50),\n" +
-                "\t\t  PRIMARY KEY (`id`));");
+    public static void addAutomaticTransaction(String sendingAccount,String recievingAccount,Double amount,String text,Date startingDate ,Date endingDate){
+        String eventID = UUID.randomUUID().toString();
+        eventID = eventID.replaceAll("-","");
+        PreparedStatement ps = preparedStatement("CREATE EVENT " + eventID + "\n" +
+                "\t ON SCHEDULE\n" +
+                "\t\tEVERY 1 MONTH STARTS ? ENDS ?\n" +
+                "\tON COMPLETION NOT PRESERVE\n" +
+                "\tDO BEGIN\n" +
+                "\t\t INSERT INTO transactions SET transaction_name = ?,`account` = ?,\n" +
+                "\t\t  `type` = 'Utgående', transaction_ammount = -?; \n" +
+                "\t\t     \n" +
+                "\t\t  INSERT INTO transactions SET transaction_name = ?,`account` = ?,\n" +
+                "\t\t  `type` = 'Inkommande', transaction_ammount = ?;   \n" +
+                "\tEND");
         try {
+            ps.setDate(1,startingDate);
+            ps.setDate(2,endingDate);
+            ps.setString(3,text);
+            ps.setString(4,sendingAccount);
+            ps.setDouble(5,amount);
+            ps.setString(6,text);
+            ps.setString(7,recievingAccount);
+            ps.setDouble(8,amount);
             ps.executeUpdate();
-            addSchedueldTransaction(socialNumber, amount, senderAccount, recieverAccount, date, text, type);
+            addAutomaticTransactionToUser(eventID);
         } catch (SQLException e) {
-            if (e.getErrorCode() == 1050) {
-                 //1050 if already exists
-                addSchedueldTransaction(socialNumber, amount, senderAccount, recieverAccount, date, text, type);
-            } else {
-                e.printStackTrace();
-            }
+            e.printStackTrace();
         }
     }
 
-    private static void addSchedueldTransaction(String socialNumber, Double amount, String senderAccount, String recieverAccount, String date, String text, String type) {
-        String personnummer = Program.getLoggedInUser().getSocial_number();
-        switch (type) {
-            case "Lön":
-                PreparedStatement ps = preparedStatement("INSERT INTO user"+personnummer+ " SET social_number = ?,amount = ?,sender_account = ?,transaction_date = ?, text=?");
-                try {
-                    ps.setString(1,socialNumber);
-                    ps.setDouble(2,amount);
-                    ps.setString(3,senderAccount);
-                    ps.setString(4,date);
-                    ps.setString(5,text);
-                    ps.executeUpdate();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                break;
-            case "Överföring":
-                break;
+    private static void addAutomaticTransactionToUser(String eventID){
+        PreparedStatement ps = preparedStatement("{CALL add_event_info(?,?)}");
+        try {
+            ps.setString(1,eventID);
+            ps.setString(2, Program.getLoggedInUser().getSocial_number());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
+
 

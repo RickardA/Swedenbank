@@ -11,7 +11,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 
 public class CardController implements ParentController {
-    NavController navController;
+    private NavController navController;
 
     @FXML
     private Button cardButton;
