@@ -1,22 +1,16 @@
 package com.company.Navigation;
 
 import com.company.Account;
+import com.company.AccountSettings.AccountSettingsController;
 import com.company.Accounts.AccountController;
 import com.company.Card.CardController;
 import com.company.Company.CompanyController;
-import com.company.Database.DB;
 import com.company.Home.HomeController;
-import com.company.Program;
 import com.company.Transactions.TransactionController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
-
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.Calendar;
 
 public class NavController {
 
@@ -64,6 +58,12 @@ public class NavController {
         CompanyController companyController = new CompanyController();
         companyController.setParent(this);
         displayUI("../Company/company.fxml",companyController);
+    }
+
+    public void displayAccountSettingsPage(){
+        AccountSettingsController accountSettingsController = new AccountSettingsController();
+        accountSettingsController.setParent(this);
+        displayUI("../AccountSettings/accountSettings.fxml",accountSettingsController);
     }
 
 }

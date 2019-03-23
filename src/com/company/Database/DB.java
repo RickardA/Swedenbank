@@ -1,6 +1,7 @@
 package com.company.Database;
 
 import com.company.Account;
+import com.company.Helpers.Messsage;
 import com.company.Program;
 import com.company.Transaction;
 import com.company.User;
@@ -81,8 +82,14 @@ public abstract class DB {
             cs.setString(3, recievingAccount);
             cs.setDouble(4, amount);
             cs.executeUpdate();
+            Messsage.printSuccess("Överföringen har genomförts");
         } catch (SQLException e) {
-            e.printStackTrace();
+            if (e.getErrorCode() == 1264){
+                Messsage.printError("Det går inte att genomföra överföringen \nDetta beror på att det inte finns tillräckligt med pengar på kontot");
+            }else{
+                e.printStackTrace();
+
+            }
         }
     }
 
@@ -92,8 +99,14 @@ public abstract class DB {
             cs.setString(1, socialNumber);
             cs.setDouble(2, amount);
             cs.executeUpdate();
+            Messsage.printSuccess("Betalningen har genomförts");
         } catch (SQLException e) {
-            e.printStackTrace();
+            if (e.getErrorCode() == 1264){
+                Messsage.printError("Det går inte att genomföra betalning \nDetta beror på att det inte finns tillräckligt med pengar på kontot");
+            }else{
+                e.printStackTrace();
+
+            }
         }
     }
 
@@ -106,6 +119,7 @@ public abstract class DB {
             cs.setString(3, senderAccount);
             cs.setDate(4, date);
             cs.executeUpdate();
+            Messsage.printSuccess("Lön upplagd");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -135,6 +149,7 @@ public abstract class DB {
             ps.setString(7,recievingAccount);
             ps.setDouble(8,amount);
             ps.executeUpdate();
+            Messsage.printSuccess("Automatisk överföring upplagd");
             addAutomaticTransactionToUser(eventID);
         } catch (SQLException e) {
             e.printStackTrace();

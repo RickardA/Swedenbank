@@ -43,16 +43,17 @@ public class HomeController implements ParentController {
     }
 
     private void loadAccountInformation() {
-        Program.setAccounts(DB.getUsersAccount(Program.getLoggedInUser()));
+        Program.getLoggedInUser().setAccounts(DB.getUsersAccount(Program.getLoggedInUser()));
     }
 
     private void showAccountInformation(){
-        accountsTable.setItems(Program.getAccounts());
+        accountsTable.setItems(Program.getLoggedInUser().getAccounts());
     }
 
     private void showSelectedAccount() {
-        System.out.println(accountsTable.getSelectionModel().getSelectedItem());
-        parentController.switchToChoosenAccount((Account) accountsTable.getSelectionModel().getSelectedItem());
+        if (accountsTable.getSelectionModel().getSelectedItem() != null) {
+            parentController.switchToChoosenAccount((Account) accountsTable.getSelectionModel().getSelectedItem());
+        }
     }
 
     @Override

@@ -22,8 +22,9 @@
                </VBox.margin></Button>
             <Button fx:id="someButton" mnemonicParsing="false" onAction="#displayTransactionPage" prefHeight="59.0" prefWidth="153.0" text="Överföra" textFill="#ff8800" />
             <Button fx:id="paymentButton" mnemonicParsing="false" prefHeight="59.0" prefWidth="153.0" text="Betala" textFill="#ff8800" />
-            <Button fx:id="companyButton" onAction="#displayCompanyPage" mnemonicParsing="false" prefHeight="59.0" prefWidth="153.0" text="Företag" textFill="#ff8800" />
-            <Button fx:id="cardButton" onAction="#displayCardTransactionPage" mnemonicParsing="false" prefHeight="59.0" prefWidth="153.0" text="Gör ett kortköp" textFill="#ff8800" />
+            <Button fx:id="companyButton" mnemonicParsing="false" onAction="#displayCompanyPage" prefHeight="59.0" prefWidth="153.0" text="Företag" textFill="#ff8800" />
+            <Button fx:id="cardButton" mnemonicParsing="false" onAction="#displayCardTransactionPage" prefHeight="59.0" prefWidth="153.0" text="Gör ett kortköp" textFill="#ff8800" />
+            <Button fx:id="accountSettingsButton" onAction="#displayAccountSettingsPage" layoutX="10.0" layoutY="321.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="153.0" text="Konto Inställningar" textFill="#ff8800" />
             <Button fx:id="signOutButton" mnemonicParsing="false" prefHeight="59.0" prefWidth="153.0" text="Logga Ut" textFill="#ff8800" />
          </children>
       </VBox>

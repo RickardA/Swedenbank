@@ -1,6 +1,7 @@
 package com.company;
 
 import com.company.Annotations.Column;
+import javafx.collections.ObservableList;
 
 public class User {
 
@@ -12,6 +13,9 @@ public class User {
     String social_number;
     @Column
     String email;
+
+    private static ObservableList<Account> accounts = null;
+
 
     public String getFirst_name() {
         return first_name;
@@ -27,5 +31,13 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public ObservableList<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(ObservableList<Account> accounts) {
+        this.accounts = accounts;
     }
 }

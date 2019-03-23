@@ -5,7 +5,6 @@ import javafx.collections.ObservableList;
 
 public class Program {
     private static User loggedInUser;
-    private static ObservableList<Account> accounts = null;
 
     public Program(){
         Thread databaseThread = new Thread(Database.getInstance());
@@ -22,11 +21,5 @@ public class Program {
         return loggedInUser;
     }
 
-    public static ObservableList<Account> getAccounts() {
-        return accounts;
-    }
 
-    public static void setAccounts(ObservableList<Account> accounts) {
-        Program.accounts = accounts;
-    }
 }

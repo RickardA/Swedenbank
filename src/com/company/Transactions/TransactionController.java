@@ -1,7 +1,7 @@
 package com.company.Transactions;
 
 import com.company.Database.DB;
-import com.company.Helpers.Error;
+import com.company.Helpers.Messsage;
 import com.company.Helpers.Extractor;
 import com.company.Interfaces.ParentController;
 import com.company.Navigation.NavController;
@@ -57,7 +57,7 @@ public class TransactionController implements ParentController {
                 makeTransaction();
             }else{ makeAutomaticTransaction();}
         });
-        Program.getAccounts().forEach(account -> {
+        Program.getLoggedInUser().getAccounts().forEach(account -> {
             sendingAccount.getItems().add(account.getAccount_name() + " " + account.getAccount_number());
             recievingAccountChoiceBox.getItems().add(account.getAccount_name() + " " + account.getAccount_number());
         });
@@ -102,13 +102,18 @@ public class TransactionController implements ParentController {
         if (getInputInformation()){
             LocalDate dateFromStartPicker = startDatePicker.getValue();
             LocalDate dateFromEndPicker = endDatePicker.getValue();
+            System.out.println(startDatePicker.equals(endDatePicker));
             if (dateFromStartPicker != null && dateFromEndPicker != null){
-                Date startDate = Date.valueOf(dateFromStartPicker);
-                Date endDate =  Date.valueOf(dateFromEndPicker);
-                DB.addAutomaticTransaction(selectedSendingAccount,selectedRecievingAccount,amount,text,startDate,endDate);
-                resetInputs();
+                if (!dateFromStartPicker.equals(dateFromEndPicker)){
+                    Date startDate = Date.valueOf(dateFromStartPicker);
+                    Date endDate =  Date.valueOf(dateFromEndPicker);
+                    DB.addAutomaticTransaction(selectedSendingAccount,selectedRecievingAccount,amount,text,startDate,endDate);
+                    resetInputs();
+                }else{
+                    Messsage.printError("Startdatum och slutdatum får inte vara samma");
+                }
             }else {
-                Error.printError("Vänligen välj en dag som överföringen skall utföras på");
+                Messsage.printError("Vänligen välj en dag som överföringen skall utföras på");
             }
 
         }
@@ -123,12 +128,12 @@ public class TransactionController implements ParentController {
             if (selectedRecievingAccount.matches("\\d{3}\\.\\d{3}\\.\\d{3}\\-\\d")){
                 return true;
             }else {
-                Error.printError("Fel format på kontonummer \n (xxx.xxx.xxx-x)");
+                Messsage.printError("Fel format på kontonummer \n (xxx.xxx.xxx-x)");
                 return false;
             }
 
         } else {
-            Error.printError("Vänligen fyll i alla fält");
+            Messsage.printError("Vänligen fyll i alla fält");
             return false;
         }
     }

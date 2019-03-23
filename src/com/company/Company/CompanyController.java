@@ -1,7 +1,7 @@
 package com.company.Company;
 
 import com.company.Database.DB;
-import com.company.Helpers.Error;
+import com.company.Helpers.Messsage;
 import com.company.Helpers.Extractor;
 import com.company.Interfaces.ParentController;
 import com.company.Navigation.NavController;
@@ -33,7 +33,7 @@ public class CompanyController implements ParentController {
 
     private void setup(){
         executeButton.setOnMousePressed(event -> {executeSalaryPayment();});
-        Program.getAccounts().forEach(account -> {
+        Program.getLoggedInUser().getAccounts().forEach(account -> {
             sendingAccount.getItems().add(account.getAccount_name() + " " + account.getAccount_number());
         });
         amountField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -53,11 +53,11 @@ public class CompanyController implements ParentController {
                 Date date = Date.valueOf(datFromPicker);
                 DB.addSalaryTransaction(socialNumber,amount,sendingAccountNumber,date);
             }else{
-                Error.printError("Personnummret måste bestå av 10 siffror \n" +
+                Messsage.printError("Personnummret måste bestå av 10 siffror \n" +
                         "i följande format : xxxxxxxxxx ");
             }
         }else{
-            Error.printError("Vänligen fyll i alla fält");
+            Messsage.printError("Vänligen fyll i alla fält");
         }
         resetInputs();
     }
