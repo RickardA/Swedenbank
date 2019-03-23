@@ -95,7 +95,7 @@ public class AccountController implements ParentController {
    /* private List<Transaction> calculateOutgoingTransactions(){
         List<Transaction> outgoingTransactions = new ArrayList<>();
         account.getTransactions().forEach(transaction -> {
-            if(transaction.getType().trim().equals(account.getAccount_number().trim())){
+            if(transaction.getAccount_type().trim().equals(account.getAccount_number().trim())){
                 System.out.println("printing from something fun " + transaction.getAccount() + " " + account.getAccount_number());
                 outgoingTransactions.add(transaction);
             }

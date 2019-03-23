@@ -37,4 +37,8 @@ public class Account {
     public ObservableList<Transaction> getTransactions(){
         return transactions;
     }
+
+    public String getType() {
+        return type;
+    }
 }

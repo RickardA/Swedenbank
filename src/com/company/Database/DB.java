@@ -39,7 +39,7 @@ public abstract class DB {
     public static ObservableList<Account> getUsersAccount(User user) {
         List<Account> accounts;
         ObservableList<Account> accounts1 = null;
-        PreparedStatement ps = preparedStatement("SELECT account_number,account_name,balance FROM accountinformation\n" +
+        PreparedStatement ps = preparedStatement("SELECT account_number,account_name,balance,type FROM accountinformation\n" +
                 "WHERE social_number = ?");
         try {
             ps.setString(1, user.getSocial_number());

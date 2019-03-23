@@ -11,10 +11,10 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.skin.TableHeaderRow;
+import javafx.scene.input.MouseButton;
 
 public class HomeController implements ParentController {
 
@@ -27,19 +27,39 @@ public class HomeController implements ParentController {
     @FXML
     private TableView accountsTable;
     private NavController parentController;
+    private ContextMenu cm;
 
     @FXML
     private void initialize() {
         setup();
         loadAccountInformation();
         showAccountInformation();
+        createAccountMenu();
     }
 
     private void setup() {
         accountNameColumn.setCellValueFactory(new PropertyValueFactory<>("account_name"));
         accountBalanceColumn.setCellValueFactory(new PropertyValueFactory<>("balance"));
         accountNumberColumn.setCellValueFactory(new PropertyValueFactory<>("account_number"));
-        accountsTable.setOnMousePressed(event -> showSelectedAccount());
+        accountsTable.setOnMousePressed(event -> {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                showSelectedAccount();
+            }
+            else if (event.getButton() == MouseButton.SECONDARY){
+                showItemOptions(event.getScreenX(),event.getScreenY());
+            }
+        });
+    }
+
+    private void showItemOptions(double x,double y){
+        cm.show(accountsTable,x,y);
+    }
+
+    private void createAccountMenu(){
+        cm = new ContextMenu();
+        MenuItem settings = new MenuItem("Inställningar");
+        settings.setOnAction(event -> parentController.displayAccountSettingsPage((Account) accountsTable.getSelectionModel().getSelectedItem()));
+        cm.getItems().add(settings);
     }
 
     private void loadAccountInformation() {

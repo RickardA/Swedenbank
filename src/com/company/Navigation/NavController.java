@@ -60,9 +60,10 @@ public class NavController {
         displayUI("../Company/company.fxml",companyController);
     }
 
-    public void displayAccountSettingsPage(){
+    public void displayAccountSettingsPage(Account account){
         AccountSettingsController accountSettingsController = new AccountSettingsController();
         accountSettingsController.setParent(this);
+        accountSettingsController.setAccount(account);
         displayUI("../AccountSettings/accountSettings.fxml",accountSettingsController);
     }
 
