@@ -93,13 +93,20 @@ public abstract class DB {
         }
     }
 
-    public static void makeCardPayment(String socialNumber, Double amount) {
-        CallableStatement cs = callableStatement("{CALL add_card_transaction(?,?)}");
+    public static boolean makeCardPayment(String socialNumber, Double amount) {
+        CallableStatement cs = callableStatement("{CALL add_card_transaction(?,?,?)}");
         try {
             cs.setString(1, socialNumber);
             cs.setDouble(2, amount);
+            cs.registerOutParameter(3, Types.INTEGER);
             cs.executeUpdate();
-            Messsage.printSuccess("Betalningen har genomförts");
+            int result = cs.getInt(3);
+            if (result == 1){
+                Messsage.printSuccess("Betalningen har genomförts");
+                return true;
+            }else{
+                return false;
+            }
         } catch (SQLException e) {
             if (e.getErrorCode() == 1264){
                 Messsage.printError("Det går inte att genomföra betalning \nDetta beror på att det inte finns tillräckligt med pengar på kontot");
@@ -108,21 +115,28 @@ public abstract class DB {
 
             }
         }
+        return false;
     }
 
 
-    public static void addSalaryTransaction(String socialNumber, Double amount, String senderAccount, Date date) {
-        CallableStatement cs = callableStatement("{CALL add_employee_salary(?,?,?,?)}");
+    public static int addSalaryTransaction(String socialNumber, Double amount, String senderAccount, Date date) {
+        int result = 0;
+        CallableStatement cs = callableStatement("{CALL add_employee_salary(?,?,?,?,?)}");
         try {
             cs.setString(1, socialNumber);
             cs.setDouble(2, amount);
             cs.setString(3, senderAccount);
             cs.setDate(4, date);
+            cs.registerOutParameter(5,Types.INTEGER);
             cs.executeUpdate();
-            Messsage.printSuccess("Lön upplagd");
+            result = cs.getInt(5);
+            if (result == 1){
+                Messsage.printSuccess("Lön upplagd");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return result;
     }
 
     public static void addAutomaticTransaction(String sendingAccount,String recievingAccount,Double amount,String text,Date startingDate ,Date endingDate){
@@ -164,6 +178,69 @@ public abstract class DB {
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static boolean changeAccountType(String accountType,String accountNumber){
+        CallableStatement ps = callableStatement("{CALL change_account_type(?,?,?,?) }");
+        try {
+            ps.setString(1,accountType);
+            ps.setString(2,accountNumber);
+            ps.setString(3,Program.getLoggedInUser().getSocial_number());
+            ps.registerOutParameter(4, java.sql.Types.INTEGER);
+            ps.executeUpdate();
+            int result =  ps.getInt(4);
+            if (result == 0){
+                return false;
+            }else{
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static void changeAccountName(String accountName, String accountNumber){
+        CallableStatement ps = callableStatement("{CALL change_account_name(?,?) }");
+        try {
+            ps.setString(1,accountNumber);
+            ps.setString(2,accountName);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean deleteAccount(String accountNumber){
+        CallableStatement cs = callableStatement("{CALL delete_account(?,?,?)}");
+        try {
+            cs.setString(1,accountNumber);
+            cs.registerOutParameter(2,Types.INTEGER);
+            cs.setString(3,Program.getLoggedInUser().getSocial_number());
+            cs.executeUpdate();
+            int result = cs.getInt(2);
+            if (result == 0){
+                return false;
+            }else{
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean createAccount(String accountName){
+        CallableStatement cs = callableStatement("{CALL create_account(?,?)}");
+        try {
+            cs.setString(1,accountName);
+            cs.setString(2,Program.getLoggedInUser().getSocial_number());
+            cs.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }

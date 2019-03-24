@@ -51,7 +51,12 @@ public class CompanyController implements ParentController {
         if (!socialNumber.isEmpty() && sendingAccountNumber != null && datFromPicker != null && amount != 0.0){
             if (socialNumber.matches("\\d{10}")){
                 Date date = Date.valueOf(datFromPicker);
-                DB.addSalaryTransaction(socialNumber,amount,sendingAccountNumber,date);
+                int result = DB.addSalaryTransaction(socialNumber,amount,sendingAccountNumber,date);
+                if (result == 0){
+                    Messsage.printError("Personen finns inte registrerad i banken");
+                }else if(result == 2){
+                    Messsage.printError("Personen är redan registrerad");
+                }
             }else{
                 Messsage.printError("Personnummret måste bestå av 10 siffror \n" +
                         "i följande format : xxxxxxxxxx ");

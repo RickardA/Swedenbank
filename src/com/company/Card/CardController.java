@@ -1,6 +1,7 @@
 package com.company.Card;
 
 import com.company.Database.DB;
+import com.company.Helpers.Messsage;
 import com.company.Interfaces.ParentController;
 import com.company.Navigation.NavController;
 import com.company.Program;
@@ -28,7 +29,10 @@ public class CardController implements ParentController {
         cardButton.setOnMousePressed(event -> {
             if (!cardAmount.getText().isEmpty()){
                 Double amount = Double.parseDouble(cardAmount.getText());
-                DB.makeCardPayment(Program.getLoggedInUser().getSocial_number(),amount);
+                boolean result = DB.makeCardPayment(Program.getLoggedInUser().getSocial_number(),amount);
+                if (result == false){
+                    Messsage.printError("Det finns inget konto kopplat till kortet");
+                }
                 cardAmount.setText("");
             }else {
                 Alert alert = new Alert(
