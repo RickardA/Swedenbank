@@ -31,6 +31,8 @@ public class AccountSettingsController implements ParentController {
     @FXML
     private RadioButton undefinedButton;
     @FXML
+    private RadioButton companyButton;
+    @FXML
     private Button deleteButton;
     @FXML
     private Text saldoText;
@@ -52,6 +54,7 @@ public class AccountSettingsController implements ParentController {
         cardButton.setToggleGroup(toggleGroup);
         salaryButton.setToggleGroup(toggleGroup);
         undefinedButton.setToggleGroup(toggleGroup);
+        companyButton.setToggleGroup(toggleGroup);
         switch(account.getType()){
             case "Sparkonto":
                 savingsButton.fire();
@@ -64,6 +67,9 @@ public class AccountSettingsController implements ParentController {
                 break;
             case "Ingen Koppling":
                 undefinedButton.fire();
+                break;
+            case "Företagskonto":
+                companyButton.fire();
                 break;
         }
         deleteButton.setOnMousePressed(event -> deleteAccount());

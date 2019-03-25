@@ -8,6 +8,7 @@ import com.company.Navigation.NavController;
 import com.company.Program;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.text.Text;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -25,22 +26,32 @@ public class CompanyController implements ParentController {
     private DatePicker datePicker;
     @FXML
     private Button executeButton;
+    @FXML
+    private Text errorText;
 
     @FXML
     private void initialize(){
         setup();
     }
+    private boolean hasCompanyAccount = false;
 
     private void setup(){
+        hasCompanyAccount = false;
         executeButton.setOnMousePressed(event -> {executeSalaryPayment();});
         Program.getLoggedInUser().getAccounts().forEach(account -> {
-            sendingAccount.getItems().add(account.getAccount_name() + " " + account.getAccount_number());
+            if (account.getType().equals("Företagskonto")) {
+                hasCompanyAccount = true;
+                sendingAccount.getItems().add(account.getAccount_name() + " " + account.getAccount_number());
+            }
         });
         amountField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 amountField.setText(newValue.replaceAll("[^\\d]", ""));
             }
         });
+        if (hasCompanyAccount == false){
+            errorText.setVisible(true);
+        }
     }
 
     private void executeSalaryPayment(){
