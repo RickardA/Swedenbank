@@ -68,9 +68,7 @@ INSERT INTO `accounts` (`id`, `account_number`, `account_name`, `balance`, `type
 	(1, '123.123.123-2', 'Godiskontot', 2001656, 'Kortkonto'),
 	(3, '111.111.111-1', 'Visa', 480, 'Företagskonto'),
 	(4, '232.232.232-2', 'Företagskonto', 1e21, 'Företagskonto'),
-	(15, '727-7536', 'Länsförsäkringar', 410, 'Företagskonto'),
-	(16, '7273-7657', 'Swedenbank', 0, 'Företagskonto'),
-	(17, '486 84 04-7', 'Toyshop', 0, 'Företagskonto');
+	(18, '243.123.543-1', 'Bilkonto', 123, 'Ingen Koppling');
 /*!40000 ALTER TABLE `accounts` ENABLE KEYS */;
 
 -- Dumpar struktur för procedur swedenbank.add_card_transaction
@@ -372,7 +370,7 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=146 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_swedish_ci;
 
--- Dumpar data för tabell swedenbank.transactions: ~11 rows (ungefär)
+-- Dumpar data för tabell swedenbank.transactions: ~13 rows (ungefär)
 /*!40000 ALTER TABLE `transactions` DISABLE KEYS */;
 INSERT INTO `transactions` (`id`, `transaction_name`, `account`, `type`, `transaction_ammount`, `date`) VALUES
 	(15, 'Lön', '232.232.232-2', 'Utgående', -23423423423, '2019-03-22 11:23:44'),
@@ -406,7 +404,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `first_name`, `last_name`, `social_number`, `email`, `password`) VALUES
 	(1, 'Rickard', 'Andersson', '8902149867', 'rickard98@gmail.com', 'password1234'),
-	(2, 'Visa', 'Visa', '1111111111', 'visa@visa.se', 'password1234');
+	(2, 'Visa', 'Visa', '1111111111', 'visa@visa.se', 'password1234'),
+	(3, 'Test', 'Nisse', '7802138947', 'testnisse@nisse.com', 'password1234');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 -- Dumpar struktur för tabell swedenbank.userxaccount
@@ -420,7 +419,8 @@ CREATE TABLE IF NOT EXISTS `userxaccount` (
 INSERT INTO `userxaccount` (`user_id`, `account_id`) VALUES
 	(1, 1),
 	(2, 3),
-	(1, 4);
+	(1, 4),
+	(3, 18);
 /*!40000 ALTER TABLE `userxaccount` ENABLE KEYS */;
 
 -- Dumpar struktur för trigger swedenbank.call_adjust_balance
