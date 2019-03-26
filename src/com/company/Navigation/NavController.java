@@ -67,7 +67,4 @@ public class NavController {
         displayUI("../AccountSettings/accountSettings.fxml",accountSettingsController);
     }
 
-    public void test(){
-    }
-
 }
