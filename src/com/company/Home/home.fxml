@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.company.Home"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane fx:id="homePage" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TableView fx:id="accountsTable" fixedCellSize="30" layoutX="54.0" layoutY="14.0" prefHeight="281.0" prefWidth="491.0">
+        <columns>
+           <TableColumn fx:id="accountNumberColumn" prefWidth="120" text="Kontonummer" />
+          <TableColumn fx:id="accountNameColumn" prefWidth="150" text="Kontonamn" />
+          <TableColumn fx:id="accountBalanceColumn" prefWidth="120" text="Tillgängligt Belopp" />
+            <TableColumn fx:id="accountTypeColumn" prefWidth="100" text="Konto Typ" />
+        </columns>
+      </TableView>
+      <Button fx:id="createAccountButton" layoutX="321.0" layoutY="327.0" mnemonicParsing="false" text="Skapa nytt konto" />
+      <TextField fx:id="accountNameField" layoutX="172.0" layoutY="327.0" />
+   </children>
 </AnchorPane>
