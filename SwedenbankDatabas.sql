@@ -38,6 +38,17 @@ CREATE DEFINER=`root`@`localhost` EVENT `70a052ecf24546668f353d1f5366ff8b` ON SC
 	END//
 DELIMITER ;
 
+-- Dumpar struktur för händelse swedenbank.a2753df37931414abbb31884e33e9629
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` EVENT `a2753df37931414abbb31884e33e9629` ON SCHEDULE AT '2019-03-28 01:00:00' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN
+		 INSERT INTO transactions SET transaction_name = 'f',`account` = '123.123.123-2',
+		  `type` = 'Utgående', transaction_ammount = -32.0; 
+		     
+		  INSERT INTO transactions SET transaction_name = 'f',`account` = '232-2323',
+		  `type` = 'Inkommande', transaction_ammount = 32.0;   
+	END//
+DELIMITER ;
+
 -- Dumpar struktur för vy swedenbank.accountinformation
 -- Skapar temporärtabell för att hantera VIEW-beroendefel
 CREATE TABLE `accountinformation` (
@@ -60,15 +71,16 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `type` varchar(50) COLLATE utf8mb4_swedish_ci DEFAULT 'Ingen Koppling',
   PRIMARY KEY (`id`),
   UNIQUE KEY `account_number` (`account_number`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_swedish_ci;
 
--- Dumpar data för tabell swedenbank.accounts: ~6 rows (ungefär)
+-- Dumpar data för tabell swedenbank.accounts: ~5 rows (ungefär)
 /*!40000 ALTER TABLE `accounts` DISABLE KEYS */;
 INSERT INTO `accounts` (`id`, `account_number`, `account_name`, `balance`, `type`) VALUES
-	(1, '123.123.123-2', 'Godiskontot', 2001656, 'Kortkonto'),
-	(3, '111.111.111-1', 'Visa', 480, 'Företagskonto'),
-	(4, '232.232.232-2', 'Företagskonto', 1e21, 'Företagskonto'),
-	(18, '243.123.543-1', 'Bilkonto', 123, 'Ingen Koppling');
+	(1, '123.123.123-2', 'Godiskontot', 2001623, 'Kortkonto'),
+	(3, '123-1238', 'Visa', 480, 'Företagskonto'),
+	(4, '2322-2322', 'Företagskonto', 1e21, 'Företagskonto'),
+	(18, '243.123.543-1', 'Bilkonto', 123, 'Ingen Koppling'),
+	(19, '1234-5678', 'Volvo', 35, 'Företagskonto');
 /*!40000 ALTER TABLE `accounts` ENABLE KEYS */;
 
 -- Dumpar struktur för procedur swedenbank.add_card_transaction
@@ -143,13 +155,20 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_transaction`(
 	IN `t_amount` DOUBLE
 
 
+,
+	OUT `result` INT
 )
 BEGIN
+		IF EXISTS(SELECT id FROM accounts WHERE account_number = t_reciever) THEN
         INSERT INTO transactions SET transaction_name = t_name,`account` = t_sender,
 		  `type` = 'Utgående', transaction_ammount = -t_amount; 
 		     
 		  INSERT INTO transactions SET transaction_name = t_name,`account` = t_reciever,
-		  `type` = 'Inkommande', transaction_ammount = t_amount;     
+		  `type` = 'Inkommande', transaction_ammount = t_amount;  
+		  SET result = 1; 
+		  ELSE
+		  	SET result = 0;  
+		  	END IF;
    END//
 DELIMITER ;
 
@@ -217,6 +236,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `create_account`(
 	IN `a_name` VARCHAR(50),
 	IN `a_user` VARCHAR(50)
 
+
+
+
 )
 BEGIN
 	DECLARE first_numbers INTEGER;
@@ -277,13 +299,17 @@ CREATE TABLE IF NOT EXISTS `events` (
   `eventID` varchar(50) COLLATE utf8mb4_swedish_ci NOT NULL,
   `userID` varchar(50) COLLATE utf8mb4_swedish_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_swedish_ci;
 
--- Dumpar data för tabell swedenbank.events: ~2 rows (ungefär)
+-- Dumpar data för tabell swedenbank.events: ~6 rows (ungefär)
 /*!40000 ALTER TABLE `events` DISABLE KEYS */;
 INSERT INTO `events` (`id`, `eventID`, `userID`) VALUES
 	(1, '70a052ecf24546668f353d1f5366ff8b', '8902149867'),
-	(2, '3ec07ac8ad17452f894a133ee8f3b1ad', '8902149867');
+	(2, '3ec07ac8ad17452f894a133ee8f3b1ad', '8902149867'),
+	(3, 'bf413ef593f840408aff78dbb8d27f3d', '8902149867'),
+	(4, 'f184d2782f104fe7a52a839cddce968f', '8902149867'),
+	(5, '412fc08ad1f74d2a95ef00d68a20c8ff', '8902149867'),
+	(6, '0c804a763d59469d867915b0f05399a3', '8902149867');
 /*!40000 ALTER TABLE `events` ENABLE KEYS */;
 
 -- Dumpar struktur för procedur swedenbank.pay_salary
@@ -368,24 +394,10 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   `transaction_ammount` double NOT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=146 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=154 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_swedish_ci;
 
--- Dumpar data för tabell swedenbank.transactions: ~13 rows (ungefär)
+-- Dumpar data för tabell swedenbank.transactions: ~19 rows (ungefär)
 /*!40000 ALTER TABLE `transactions` DISABLE KEYS */;
-INSERT INTO `transactions` (`id`, `transaction_name`, `account`, `type`, `transaction_ammount`, `date`) VALUES
-	(15, 'Lön', '232.232.232-2', 'Utgående', -23423423423, '2019-03-22 11:23:44'),
-	(85, 'Lön', '232.232.232-2', 'Utgående', -25000, '2019-03-22 11:42:03'),
-	(86, 'Lön', '234.123.433-3', 'Inkommande', 25000, '2019-03-22 11:42:03'),
-	(87, 'Lön', '232.232.232-2', 'Utgående', -25000, '2019-03-22 11:42:03'),
-	(88, 'Lön', '234.123.433-3', 'Inkommande', 25000, '2019-03-22 11:42:03'),
-	(89, 'Lön', '232.232.232-2', 'Utgående', -25000, '2019-03-22 11:42:03'),
-	(90, 'Lön', '234.123.433-3', 'Inkommande', 25000, '2019-03-22 11:42:03'),
-	(91, 'Lön', '232.232.232-2', 'Utgående', -25000, '2019-03-22 11:42:03'),
-	(92, 'Lön', '234.123.433-3', 'Inkommande', 25000, '2019-03-22 11:42:03'),
-	(93, 'Lön', '232.232.232-2', 'Utgående', -25000, '2019-03-22 11:42:03'),
-	(94, 'Lön', '234.123.433-3', 'Inkommande', 25000, '2019-03-22 11:42:03'),
-	(144, 'TetstTEst', '111.111.111-1', 'Utgående', -400, '2019-03-25 11:08:10'),
-	(145, 'TetstTEst', '727-7536', 'Inkommande', 400, '2019-03-25 11:08:10');
 /*!40000 ALTER TABLE `transactions` ENABLE KEYS */;
 
 -- Dumpar struktur för tabell swedenbank.users
@@ -398,9 +410,9 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password` varchar(255) COLLATE utf8mb4_swedish_ci NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `social_number` (`social_number`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_swedish_ci;
 
--- Dumpar data för tabell swedenbank.users: ~2 rows (ungefär)
+-- Dumpar data för tabell swedenbank.users: ~3 rows (ungefär)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `first_name`, `last_name`, `social_number`, `email`, `password`) VALUES
 	(1, 'Rickard', 'Andersson', '8902149867', 'rickard98@gmail.com', 'password1234'),
@@ -414,13 +426,14 @@ CREATE TABLE IF NOT EXISTS `userxaccount` (
   `account_id` int(11) unsigned NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_swedish_ci;
 
--- Dumpar data för tabell swedenbank.userxaccount: ~3 rows (ungefär)
+-- Dumpar data för tabell swedenbank.userxaccount: ~4 rows (ungefär)
 /*!40000 ALTER TABLE `userxaccount` DISABLE KEYS */;
 INSERT INTO `userxaccount` (`user_id`, `account_id`) VALUES
 	(1, 1),
 	(2, 3),
 	(1, 4),
-	(3, 18);
+	(3, 18),
+	(3, 4);
 /*!40000 ALTER TABLE `userxaccount` ENABLE KEYS */;
 
 -- Dumpar struktur för trigger swedenbank.call_adjust_balance
