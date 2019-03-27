@@ -6,6 +6,7 @@ import com.company.Accounts.AccountController;
 import com.company.Card.CardController;
 import com.company.Company.CompanyController;
 import com.company.Home.HomeController;
+import com.company.Payment.PaymentController;
 import com.company.Transactions.TransactionController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -65,6 +66,12 @@ public class NavController {
         accountSettingsController.setParent(this);
         accountSettingsController.setAccount(account);
         displayUI("../AccountSettings/accountSettings.fxml",accountSettingsController);
+    }
+
+    public void displayPaymentPage(){
+        PaymentController paymentController = new PaymentController();
+        paymentController.setParent(this);
+        displayUI("../Payment/payment.fxml", paymentController);
     }
 
 }

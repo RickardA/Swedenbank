@@ -56,10 +56,10 @@ public class HomeController implements ParentController {
     private void createAccount() {
         if (!accountNameField.getText().isEmpty()) {
             boolean result = DB.createAccount(accountNameField.getText());
-            if (result == true){
+            if (result == true) {
                 Messsage.printSuccess("Konto Skapat");
                 parentController.displayHomePage();
-            }else{
+            } else {
                 Messsage.printError("Något gick fel försök igen");
             }
         }

@@ -58,8 +58,10 @@ public class TransactionController implements ParentController {
             }else{ makeAutomaticTransaction();}
         });
         Program.getLoggedInUser().getAccounts().forEach(account -> {
-            sendingAccount.getItems().add(account.getAccount_name() + " " + account.getAccount_number());
-            recievingAccountChoiceBox.getItems().add(account.getAccount_name() + " " + account.getAccount_number());
+            if (!account.getType().matches("Företagskonto")) {
+                sendingAccount.getItems().add(account.getAccount_name() + " " + account.getAccount_number());
+                recievingAccountChoiceBox.getItems().add(account.getAccount_name() + " " + account.getAccount_number());
+            }
         });
         amountField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
@@ -125,10 +127,10 @@ public class TransactionController implements ParentController {
         text = textField.getText();
         amount = amountField.getText().isEmpty() ? 0 : Double.parseDouble(amountField.getText());
         if (selectedSendingAccount != null && selectedRecievingAccount != null && !text.isEmpty() && amount != 0.0) {
-            if (selectedRecievingAccount.matches("\\d{3}\\.\\d{3}\\.\\d{3}\\-\\d")){
+            if (selectedRecievingAccount.matches("\\d{3}\\.\\d{3}\\.\\d{3}-\\d")){
                 return true;
             }else {
-                Messsage.printError("Fel format på kontonummer \n (xxx.xxx.xxx-x)");
+                Messsage.printError("Felaktigt format på kontonummmer \n xxx.xxx.xxx-x");
                 return false;
             }
 

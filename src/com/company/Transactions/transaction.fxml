@@ -21,7 +21,7 @@
       <Text layoutX="226.0" layoutY="206.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
       <RadioButton fx:id="intTransactionButton" layoutX="183.0" layoutY="14.0" mnemonicParsing="false" selected="true" text="Intern överföring" />
       <RadioButton fx:id="extTransactionButton" layoutX="300.0" layoutY="14.0" mnemonicParsing="false" text="Extern Överföring" />
-      <TextField fx:id="recievingAccountText" layoutX="226.0" layoutY="174.0" visible="false" />
+      <TextField fx:id="recievingAccountText" layoutX="226.0" layoutY="104.0" visible="false" />
       <RadioButton fx:id="automaticTransactionButton" layoutX="194.0" layoutY="244.0" mnemonicParsing="false" text="Automatisk Överföring Varje Månad" />
       <DatePicker fx:id="startDatePicker" disable="true" layoutX="213.0" layoutY="285.0" />
       <Text layoutX="194.0" layoutY="281.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Välj startdatum för den månliga överföringen" />
