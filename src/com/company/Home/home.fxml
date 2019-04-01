@@ -10,7 +10,7 @@
 
 <AnchorPane fx:id="homePage" prefHeight="697.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <TableView fx:id="accountsTable" fixedCellSize="30" layoutX="54.0" layoutY="48.0" prefHeight="281.0" prefWidth="491.0">
+      <TableView fx:id="accountsTable" fixedCellSize="30" layoutX="76.0" layoutY="48.0" prefHeight="281.0" prefWidth="491.0">
         <columns>
            <TableColumn fx:id="accountNumberColumn" prefWidth="120" text="Kontonummer" />
           <TableColumn fx:id="accountNameColumn" prefWidth="150" text="Kontonamn" />
@@ -18,27 +18,26 @@
             <TableColumn fx:id="accountTypeColumn" prefWidth="100" text="Konto Typ" />
         </columns>
       </TableView>
-      <Button fx:id="createAccountButton" layoutX="322.0" layoutY="336.0" mnemonicParsing="false" text="Skapa nytt konto" />
-      <TextField fx:id="accountNameField" layoutX="173.0" layoutY="336.0" />
-      <Text layoutX="224.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kontoöversikt">
+      <Button fx:id="createAccountButton" layoutX="344.0" layoutY="336.0" mnemonicParsing="false" text="Skapa nytt konto" />
+      <TextField fx:id="accountNameField" layoutX="195.0" layoutY="336.0" />
+      <Text layoutX="246.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kontoöversikt">
          <font>
             <Font size="25.0" />
          </font>
       </Text>
-      <Text layoutX="161.0" layoutY="412.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sammanställning Transaktioner">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Text>
-      <Text layoutX="233.0" layoutY="430.0" strokeType="OUTSIDE" strokeWidth="0.0" text="5 Senaste för alla konton" />
-      <TableView fx:id="latestTransactionsTabel" fixedCellSize="30" layoutY="433.0" maxHeight="339" maxWidth="659.0" minHeight="231.0" minWidth="517.0" prefHeight="235.0" prefWidth="643.0">
+      <TableView fx:id="transactionTable" fixedCellSize="30" layoutX="12.0" layoutY="463.0" maxHeight="339" maxWidth="637.0" minHeight="202.0" minWidth="517.0" prefHeight="202.0" prefWidth="637.0">
          <columns>
-            <TableColumn fx:id="transactionDateColumn1" prefWidth="125" text="Konto" />
+            <TableColumn fx:id="transactionAccount" prefWidth="120" text="Konto" />
             <TableColumn fx:id="transactionDateColumn" prefWidth="125" text="Datum" />
             <TableColumn fx:id="transactionTypeColumn" prefWidth="88" text="Typ" />
-            <TableColumn fx:id="transactionTextColumn" prefWidth="181.0" text="Text" />
-            <TableColumn fx:id="transactionAmountColumn" prefWidth="120.0" text="Belopp" />
+            <TableColumn fx:id="transactionTextColumn" prefWidth="181" text="Text" />
+            <TableColumn fx:id="transactionAmountColumn" prefWidth="120" text="Belopp" />
          </columns>
       </TableView>
+      <Text layoutX="178.0" layoutY="437.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Senaste Kontohändelserna">
+         <font>
+            <Font size="25.0" />
+         </font></Text>
+      <Text layoutX="244.0" layoutY="459.0" strokeType="OUTSIDE" strokeWidth="0.0" text="(Sammanställning alla konton)" />
    </children>
 </AnchorPane>

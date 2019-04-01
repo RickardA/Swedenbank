@@ -76,10 +76,10 @@ CREATE TABLE IF NOT EXISTS `accounts` (
 -- Dumpar data för tabell swedenbank.accounts: ~5 rows (ungefär)
 /*!40000 ALTER TABLE `accounts` DISABLE KEYS */;
 INSERT INTO `accounts` (`id`, `account_number`, `account_name`, `balance`, `type`) VALUES
-	(1, '123.123.123-2', 'Godiskontot', 2001623, 'Kortkonto'),
+	(1, '123.123.123-2', 'Godiskontot', 1992116, 'Kortkonto'),
 	(3, '123-1238', 'Visa', 480, 'Företagskonto'),
 	(4, '2322-2322', 'Företagskonto', 1e21, 'Företagskonto'),
-	(18, '243.123.543-1', 'Bilkonto', 123, 'Ingen Koppling'),
+	(18, '243.123.543-1', 'Bilkonto', 19056, 'Ingen Koppling'),
 	(19, '1234-5678', 'Volvo', 35, 'Företagskonto');
 /*!40000 ALTER TABLE `accounts` ENABLE KEYS */;
 
@@ -394,11 +394,46 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   `transaction_ammount` double NOT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=154 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=178 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_swedish_ci;
 
--- Dumpar data för tabell swedenbank.transactions: ~19 rows (ungefär)
+-- Dumpar data för tabell swedenbank.transactions: ~22 rows (ungefär)
 /*!40000 ALTER TABLE `transactions` DISABLE KEYS */;
+INSERT INTO `transactions` (`id`, `transaction_name`, `account`, `type`, `transaction_ammount`, `date`) VALUES
+	(154, 'Betalning Bil', '123.123.123-2', 'Utgående', -23, '2019-03-27 16:18:25'),
+	(155, 'Betalning Bil', '243.123.543-1', 'Inkommande', 23, '2019-03-27 16:18:25'),
+	(157, 'Betalning Apa', '123.123.123-2', 'Utgående', -10000, '2019-03-27 16:20:12'),
+	(158, 'Betalning Apa', '243.123.543-1', 'Inkommande', 10000, '2019-03-27 16:20:12'),
+	(159, 'Betalning Något', '243.123.543-1', 'Utgående', -574, '2019-03-27 16:20:42'),
+	(160, 'Betalning Något', '123.123.123-2', 'Inkommande', 574, '2019-03-27 16:20:42'),
+	(161, 'Betalning Bil', '243.123.543-1', 'Inkommande', 23, '2019-03-27 16:18:25'),
+	(162, 'Betalning Apa', '243.123.543-1', 'Inkommande', 10000, '2019-03-27 16:20:12'),
+	(163, 'Betalning Något', '243.123.543-1', 'Utgående', -574, '2019-03-27 16:20:42'),
+	(164, 'Betalning Bil', '123.123.123-2', 'Utgående', -23, '2019-03-27 16:18:25'),
+	(165, 'sad', '123.123.123-2', 'Utgående', -23, '2019-03-27 16:22:15'),
+	(166, 'sad', '243.123.543-1', 'Inkommande', 23, '2019-03-27 16:22:15'),
+	(168, 'awsdf', '123.123.123-2', 'Utgående', -12, '2019-03-27 16:22:32'),
+	(169, 'awsdf', '243.123.543-1', 'Inkommande', 12, '2019-03-27 16:22:32'),
+	(170, 'easd', '123.123.123-2', 'Utgående', -12, '2019-04-01 12:00:12'),
+	(171, 'easd', '123.123.123-2', 'Inkommande', 12, '2019-04-01 12:00:12'),
+	(172, 'adsf', '123.123.123-2', 'Utgående', -234, '2019-04-01 12:00:18'),
+	(173, 'adsf', '123.123.123-2', 'Inkommande', 234, '2019-04-01 12:00:18'),
+	(174, 'wqfewqe', '123.123.123-2', 'Utgående', -1234231, '2019-04-01 12:00:25'),
+	(175, 'wqfewqe', '123.123.123-2', 'Inkommande', 1234231, '2019-04-01 12:00:25'),
+	(176, 'das', '123.123.123-2', 'Utgående', -1342342, '2019-04-01 12:00:31'),
+	(177, 'das', '123.123.123-2', 'Inkommande', 1342342, '2019-04-01 12:00:31');
 /*!40000 ALTER TABLE `transactions` ENABLE KEYS */;
+
+-- Dumpar struktur för vy swedenbank.transactions_user
+-- Skapar temporärtabell för att hantera VIEW-beroendefel
+CREATE TABLE `transactions_user` (
+	`id` INT(11) UNSIGNED NOT NULL,
+	`transaction_name` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_swedish_ci',
+	`account` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_swedish_ci',
+	`type` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_swedish_ci',
+	`transaction_ammount` DOUBLE NOT NULL,
+	`date` TIMESTAMP NOT NULL,
+	`social_number` VARCHAR(13) NULL COLLATE 'utf8mb4_swedish_ci'
+) ENGINE=MyISAM;
 
 -- Dumpar struktur för tabell swedenbank.users
 CREATE TABLE IF NOT EXISTS `users` (
@@ -426,7 +461,7 @@ CREATE TABLE IF NOT EXISTS `userxaccount` (
   `account_id` int(11) unsigned NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_swedish_ci;
 
--- Dumpar data för tabell swedenbank.userxaccount: ~4 rows (ungefär)
+-- Dumpar data för tabell swedenbank.userxaccount: ~5 rows (ungefär)
 /*!40000 ALTER TABLE `userxaccount` DISABLE KEYS */;
 INSERT INTO `userxaccount` (`user_id`, `account_id`) VALUES
 	(1, 1),
@@ -449,6 +484,11 @@ SET SQL_MODE=@OLDTMP_SQL_MODE;
 -- Tar bort temporärtabell och skapar slutgiltlig VIEW-struktur
 DROP TABLE IF EXISTS `accountinformation`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `accountinformation` AS select `accounts`.`id` AS `id`,`accounts`.`account_number` AS `account_number`,`accounts`.`account_name` AS `account_name`,`accounts`.`type` AS `type`,`accounts`.`balance` AS `balance`,`users`.`social_number` AS `social_number`,`users`.`first_name` AS `first_name`,`users`.`last_name` AS `last_name` from ((`accounts` join `userxaccount` on((`accounts`.`id` = `userxaccount`.`account_id`))) join `users` on((`userxaccount`.`user_id` = `users`.`id`)));
+
+-- Dumpar struktur för vy swedenbank.transactions_user
+-- Tar bort temporärtabell och skapar slutgiltlig VIEW-struktur
+DROP TABLE IF EXISTS `transactions_user`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `transactions_user` AS select `transactions`.`id` AS `id`,`transactions`.`transaction_name` AS `transaction_name`,`transactions`.`account` AS `account`,`transactions`.`type` AS `type`,`transactions`.`transaction_ammount` AS `transaction_ammount`,`transactions`.`date` AS `date`,`accountinformation`.`social_number` AS `social_number` from (`transactions` left join `accountinformation` on((`transactions`.`account` = `accountinformation`.`account_number`)));
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

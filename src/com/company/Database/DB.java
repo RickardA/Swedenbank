@@ -272,6 +272,21 @@ public abstract class DB {
         }
     }
 
+    public static ObservableList<Transaction> getLatestTransactions() {
+        List<Transaction> transactions;
+        ObservableList<Transaction> transactions1 = null;
+        PreparedStatement ps;
+        ps = preparedStatement("SELECT * FROM transactions_user WHERE social_number = ? ORDER BY `date` DESC LIMIT 5");
+        try {
+            ps.setString(1,Program.getLoggedInUser().getSocial_number());
+            transactions = (List<Transaction>) new ObjectMapper<>(Transaction.class).map(ps.executeQuery());
+            transactions1 = FXCollections.observableArrayList(transactions);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return transactions1;
+    }
+
 }
 
 
