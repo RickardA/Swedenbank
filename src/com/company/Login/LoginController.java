@@ -10,11 +10,13 @@ import com.company.Program;
 import com.company.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
+import javafx.stage.Screen;
 
 import java.io.IOException;
 
@@ -44,12 +46,17 @@ public class LoginController {
     }
 
     private void showHomePage(){
+        double width = 800;
+        double height = 800;
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
         try {
             FXMLLoader navPageLoader = new FXMLLoader(getClass().getResource("../Navigation/nav.fxml"));
             Parent homePageRoot = navPageLoader.load();
             NavController controller = navPageLoader.getController();
             controller.displayHomePage();
-            Scene scene = new Scene(homePageRoot,800,600);
+            Scene scene = new Scene(homePageRoot,width,height);
+            Main.stage.setX((screenBounds.getWidth() - width) / 2);
+            Main.stage.setY((screenBounds.getHeight() - height) / 2);
             Main.stage.setScene(scene);
             Main.stage.show();
         }catch (IOException e){

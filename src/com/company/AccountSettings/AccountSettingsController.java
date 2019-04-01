@@ -47,49 +47,57 @@ public class AccountSettingsController implements ParentController {
     }
 
     private void setup(){
-        accountNameField.setText(account.getAccount_name());
-        accountNumberText.setText(account.getAccount_number());
-        saldoText.setText(""+account.getBalance());
-        savingsButton.setToggleGroup(toggleGroup);
-        cardButton.setToggleGroup(toggleGroup);
-        salaryButton.setToggleGroup(toggleGroup);
-        undefinedButton.setToggleGroup(toggleGroup);
-        companyButton.setToggleGroup(toggleGroup);
-        switch(account.getType()){
-            case "Sparkonto":
-                savingsButton.fire();
-                break;
-            case "Lönekonto":
-                salaryButton.fire();
-                break;
-            case "Kortkonto":
-                cardButton.fire();
-                break;
-            case "Ingen Koppling":
-                undefinedButton.fire();
-                break;
-            case "Företagskonto":
-                companyButton.fire();
-                break;
+        if (account.getType().matches("Företagskonto")){
+            savingsButton.setVisible(false);
+            cardButton.setVisible(false);
+            salaryButton.setVisible(false);
+            undefinedButton.setVisible(false);
+            companyButton.setVisible(true);
+            companyButton.fire();
+            deleteButton.setVisible(false);
+            accountNameField.setText(account.getAccount_name());
+        }else {
+            companyButton.setVisible(false);
+            accountNameField.setText(account.getAccount_name());
+            accountNumberText.setText(account.getAccount_number());
+            saldoText.setText("" + account.getBalance());
+            savingsButton.setToggleGroup(toggleGroup);
+            cardButton.setToggleGroup(toggleGroup);
+            salaryButton.setToggleGroup(toggleGroup);
+            undefinedButton.setToggleGroup(toggleGroup);
+            switch (account.getType()) {
+                case "Sparkonto":
+                    savingsButton.fire();
+                    break;
+                case "Lönekonto":
+                    salaryButton.fire();
+                    break;
+                case "Kortkonto":
+                    cardButton.fire();
+                    break;
+                case "Ingen Koppling":
+                    undefinedButton.fire();
+                    break;
+            }
+            deleteButton.setOnMousePressed(event -> deleteAccount());
+            applyButton.setOnMousePressed(event -> applyChanges());
+            toggleGroup.selectedToggleProperty().addListener((observable, oldVal, newVal) -> {
+                if (newVal.toString().contains(account.getType())) {
+                    isTypeChanged = false;
+                } else {
+                    isTypeChanged = true;
+                }
+                checkIfChangesIsMade();
+            });
+            accountNameField.textProperty().addListener((observable, oldVal, newVal) -> {
+                if (newVal.equals(account.getAccount_name())) {
+                    isNameChanged = false;
+                } else {
+                    isNameChanged = true;
+                }
+                checkIfChangesIsMade();
+            });
         }
-        deleteButton.setOnMousePressed(event -> deleteAccount());
-        applyButton.setOnMousePressed(event -> applyChanges());
-        toggleGroup.selectedToggleProperty().addListener((observable, oldVal, newVal) -> {
-            if (newVal.toString().contains(account.getType())){
-                isTypeChanged = false;
-            }else{
-                isTypeChanged = true;
-            }
-            checkIfChangesIsMade();
-        });
-        accountNameField.textProperty().addListener((observable,oldVal,newVal) -> {
-            if (newVal.equals(account.getAccount_name())){
-                isNameChanged = false;
-            }else{
-                isNameChanged = true;
-            }
-            checkIfChangesIsMade();
-        });
     }
 
     private void checkIfChangesIsMade(){

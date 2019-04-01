@@ -6,6 +6,8 @@ import com.company.Helpers.Messsage;
 import com.company.Interfaces.ParentController;
 import com.company.Navigation.NavController;
 import com.company.Program;
+import com.company.Transaction;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -22,6 +24,18 @@ public class HomeController implements ParentController {
     @FXML
     private TableColumn<Account, String> accountTypeColumn;
     @FXML
+    private TableColumn<Transaction,String> transactionAccount;
+    @FXML
+    private TableColumn<Transaction,String> transactionDateColumn;
+    @FXML
+    private TableColumn<Transaction,String> transactionTypeColumn;
+    @FXML
+    private TableColumn<Transaction,String> transactionTextColumn;
+    @FXML
+    private TableColumn<Transaction,String> transactionAmountColumn;
+    @FXML
+    private TableView transactionTable;
+    @FXML
     private Button createAccountButton;
     @FXML
     private TableView accountsTable;
@@ -36,6 +50,8 @@ public class HomeController implements ParentController {
         loadAccountInformation();
         showAccountInformation();
         createAccountMenu();
+        loadLatestTransactions();
+        displayLatestTransactions();
     }
 
     private void setup() {
@@ -43,6 +59,11 @@ public class HomeController implements ParentController {
         accountBalanceColumn.setCellValueFactory(new PropertyValueFactory<>("balance"));
         accountNumberColumn.setCellValueFactory(new PropertyValueFactory<>("account_number"));
         accountTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+        transactionAccount.setCellValueFactory(new PropertyValueFactory<>("account"));
+        transactionDateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        transactionTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+        transactionTextColumn.setCellValueFactory(new PropertyValueFactory<>("transaction_name"));
+        transactionAmountColumn.setCellValueFactory(new PropertyValueFactory<>("transaction_ammount"));
         createAccountButton.setOnMousePressed(event -> createAccount());
         accountsTable.setOnMousePressed(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
@@ -53,13 +74,21 @@ public class HomeController implements ParentController {
         });
     }
 
+    private void loadLatestTransactions(){
+        Program.getLoggedInUser().setLatestTransactions(DB.getLatestTransactions());
+    }
+
+    private void displayLatestTransactions(){
+        transactionTable.setItems(Program.getLoggedInUser().getLatestTransactions());
+    }
+
     private void createAccount() {
         if (!accountNameField.getText().isEmpty()) {
             boolean result = DB.createAccount(accountNameField.getText());
-            if (result == true){
+            if (result == true) {
                 Messsage.printSuccess("Konto Skapat");
                 parentController.displayHomePage();
-            }else{
+            } else {
                 Messsage.printError("Något gick fel försök igen");
             }
         }

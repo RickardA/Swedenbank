@@ -74,14 +74,15 @@ public abstract class DB {
     }
 
     public static void makeTransaction(String transactionName, String sendingAccount, String recievingAccount, Double amount) {
-        CallableStatement cs = callableStatement("{CALL add_transaction(?,?,?,?)}");
-
+        CallableStatement cs = callableStatement("{CALL add_transaction(?,?,?,?,?)}");
         try {
             cs.setString(1, transactionName);
             cs.setString(2, sendingAccount);
             cs.setString(3, recievingAccount);
             cs.setDouble(4, amount);
+            cs.registerOutParameter(5,Types.INTEGER);
             cs.executeUpdate();
+            int result = cs.getInt(5);
             Messsage.printSuccess("Överföringen har genomförts");
         } catch (SQLException e) {
             if (e.getErrorCode() == 1264){
@@ -154,8 +155,8 @@ public abstract class DB {
                 "\t\t  `type` = 'Inkommande', transaction_ammount = ?;   \n" +
                 "\tEND");
         try {
-            ps.setDate(1,startingDate);
-            ps.setDate(2,endingDate);
+            ps.setString(1,startingDate.toString() + " 01:00:00");
+            ps.setString(2,endingDate.toString() + "01:00:00");
             ps.setString(3,text);
             ps.setString(4,sendingAccount);
             ps.setDouble(5,amount);
@@ -163,7 +164,7 @@ public abstract class DB {
             ps.setString(7,recievingAccount);
             ps.setDouble(8,amount);
             ps.executeUpdate();
-            Messsage.printSuccess("Automatisk överföring upplagd");
+            Messsage.printSuccess("Automatisk överföring upplagd \n Första överföring sker om 1 månad");
             addAutomaticTransactionToUser(eventID);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -243,6 +244,49 @@ public abstract class DB {
             return false;
         }
     }
+
+    public static void makePayment(String sendingAccount,String recievingAccount,Double amount,String text,Date executionDate){
+        String eventID = UUID.randomUUID().toString();
+        eventID = eventID.replaceAll("-","");
+        PreparedStatement ps = preparedStatement("CREATE EVENT " + eventID + "\n" +
+                "\tON SCHEDULE AT ?\n" +
+                "\tDO BEGIN\n" +
+                "\t\t INSERT INTO transactions SET transaction_name = ?,`account` = ?,\n" +
+                "\t\t  `type` = 'Utgående', transaction_ammount = -?; \n" +
+                "\t\t     \n" +
+                "\t\t  INSERT INTO transactions SET transaction_name = ?,`account` = ?,\n" +
+                "\t\t  `type` = 'Inkommande', transaction_ammount = ?;   \n" +
+                "\tEND");
+        try {
+            ps.setString(1,executionDate.toString() + " 01:00:00");
+            ps.setString(2,text);
+            ps.setString(3,sendingAccount);
+            ps.setDouble(4,amount);
+            ps.setString(5,text);
+            ps.setString(6,recievingAccount);
+            ps.setDouble(7,amount);
+            ps.executeUpdate();
+            Messsage.printSuccess("Planerad överföring upplagd \n");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static ObservableList<Transaction> getLatestTransactions() {
+        List<Transaction> transactions;
+        ObservableList<Transaction> transactions1 = null;
+        PreparedStatement ps;
+        ps = preparedStatement("SELECT * FROM transactions_user WHERE social_number = ? ORDER BY `date` DESC LIMIT 5");
+        try {
+            ps.setString(1,Program.getLoggedInUser().getSocial_number());
+            transactions = (List<Transaction>) new ObjectMapper<>(Transaction.class).map(ps.executeQuery());
+            transactions1 = FXCollections.observableArrayList(transactions);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return transactions1;
+    }
+
 }
 
 

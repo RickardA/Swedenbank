@@ -14,7 +14,8 @@ public class User {
     @Column
     String email;
 
-    private static ObservableList<Account> accounts = null;
+    private ObservableList<Account> accounts = null;
+    private ObservableList<Transaction> latestTransactions;
 
 
     public String getFirst_name() {
@@ -39,5 +40,13 @@ public class User {
 
     public void setAccounts(ObservableList<Account> accounts) {
         this.accounts = accounts;
+    }
+
+    public ObservableList<Transaction> getLatestTransactions() {
+        return latestTransactions;
+    }
+
+    public void setLatestTransactions(ObservableList<Transaction> latestTransactions) {
+        this.latestTransactions = latestTransactions;
     }
 }
